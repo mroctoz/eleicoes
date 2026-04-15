@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Eleitoral Brasileiro | Resultados Históricos</title>
+    
+    <!-- Tailwind CSS (Framework de Design) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- MapLibre GL CSS (Estilos do Mapa) -->
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    
+    <!-- Fontes do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Nosso CSS Customizado -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-inter overflow-hidden h-screen w-screen flex flex-col">
+
+    <!-- Barra de Navegação Superior -->
+    <header class="bg-slate-800 border-b border-slate-700 h-16 flex items-center justify-between px-6 z-20 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                <i class="fa-solid fa-check-to-slot text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white">Atlas Eleitoral Brasileiro</h1>
+                <p class="text-xs text-slate-400">Resultados por Seção (2006 - 2024)</p>
+            </div>
+        </div>
+
+        <!-- Filtros Globais -->
+        <div class="flex items-center gap-4">
+            <div class="flex bg-slate-900 rounded-md p-1 border border-slate-700">
+                <select id="ano-select" class="bg-transparent text-sm text-white outline-none cursor-pointer px-3 py-1">
+                    <option value="2022">Eleições 2022</option>
+                    <option value="2020">Eleições 2020</option>
+                    <option value="2018">Eleições 2018</option>
+                </select>
+            </div>
+            <div class="flex bg-slate-900 rounded-md p-1 border border-slate-700">
+                <select id="cargo-select" class="bg-transparent text-sm text-white outline-none cursor-pointer px-3 py-1">
+                    <option value="presidente">Presidente</option>
+                    <option value="governador">Governador</option>
+                    <option value="prefeito">Prefeito</option>
+                </select>
+            </div>
+            <button class="bg-blue-600 hover:bg-blue-500 transition px-4 py-2 rounded-md text-sm font-medium shadow-lg">
+                <i class="fa-solid fa-search mr-2"></i> Atualizar Dados
+            </button>
+        </div>
+    </header>
+
+    <!-- Área Principal (Mapa e Painéis) -->
+    <main class="flex-1 relative flex">
+        
+        <!-- O Contêiner do Mapa -->
+        <div id="map" class="absolute inset-0 z-0 bg-slate-900"></div>
+
+        <!-- Painel Lateral Esquerdo (Navegação Geográfica) -->
+        <aside class="w-80 bg-slate-800/90 backdrop-blur-md border-r border-slate-700 z-10 flex flex-col shadow-2xl transition-transform duration-300">
+            <div class="p-5 border-b border-slate-700">
+                <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Localização</h2>
+                
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-map absolute left-3 top-3 text-slate-400"></i>
+                        <select class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-md pl-10 pr-3 py-2.5 outline-none focus:border-blue-500 appearance-none">
+                            <option>São Paulo (SP)</option>
+                            <option>Rio de Janeiro (RJ)</option>
+                        </select>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-city absolute left-3 top-3 text-slate-400"></i>
+                        <select class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-md pl-10 pr-3 py-2.5 outline-none focus:border-blue-500 appearance-none">
+                            <option>São Paulo</option>
+                            <option>Guarulhos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-5 flex-1 overflow-y-auto custom-scrollbar">
+                <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Resumo do Município</h2>
+                
+                <div class="bg-slate-900 rounded-lg p-4 border border-slate-700 mb-4">
+                    <div class="text-xs text-slate-400 mb-1">Total de Votos Válidos</div>
+                    <div class="text-2xl font-bold text-white">6.124.930</div>
+                </div>
+
+                <!-- Lista de Candidatos (Resumo Municipal) -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between bg-slate-700/30 p-3 rounded-lg border-l-4 border-red-500">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
+                                <i class="fa-solid fa-user text-slate-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold">Candidato A</div>
+                                <div class="text-xs text-slate-400">Partido X</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-bold">53.2%</div>
+                            <div class="text-xs text-slate-400">3.2mi votos</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-slate-700/30 p-3 rounded-lg border-l-4 border-blue-500">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
+                                <i class="fa-solid fa-user text-slate-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold">Candidato B</div>
+                                <div class="text-xs text-slate-400">Partido Y</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-bold">46.8%</div>
+                            <div class="text-xs text-slate-400">2.9mi votos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Controles Flutuantes do Mapa -->
+        <div class="absolute top-5 right-5 z-10 flex flex-col gap-2">
+            <div class="bg-slate-800 border border-slate-700 rounded-lg shadow-xl p-1 flex">
+                <button class="px-4 py-2 text-xs font-medium rounded-md bg-blue-600 text-white flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-school"></i>
+                    <span>Colégios</span>
+                </button>
+                <button class="px-4 py-2 text-xs font-medium rounded-md text-slate-400 hover:text-white hover:bg-slate-700 flex flex-col items-center gap-1 transition">
+                    <i class="fa-solid fa-draw-polygon"></i>
+                    <span>Bairros (Zonas)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Painel Lateral Direito (Detalhes do Local de Votação - Oculto por padrão) -->
+        <aside id="details-panel" class="absolute right-0 top-0 bottom-0 w-96 bg-slate-800/95 backdrop-blur-xl border-l border-slate-700 z-20 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+            <!-- Cabeçalho do Painel -->
+            <div class="p-5 border-b border-slate-700 relative">
+                <button id="close-details" class="absolute top-4 right-4 w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-600 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="inline-block px-2 py-1 bg-slate-900 border border-slate-600 rounded text-xs font-mono text-slate-300 mb-3">
+                    <i class="fa-solid fa-hashtag mr-1"></i> ZONA <span id="lbl-zona">--</span> | LOCAL <span id="lbl-local">--</span>
+                </div>
+                <h2 id="lbl-escola" class="text-xl font-bold text-white leading-tight mb-2">Selecione um local</h2>
+                <div class="flex items-center text-xs text-slate-400 gap-4">
+                    <span><i class="fa-solid fa-users mr-1"></i> <span id="lbl-eleitores">--</span> aptos</span>
+                    <span><i class="fa-solid fa-box-archive mr-1"></i> <span id="lbl-secoes">--</span> seções</span>
+                </div>
+            </div>
+
+            <!-- Corpo do Painel: Resultados -->
+            <div class="p-5 flex-1 overflow-y-auto custom-scrollbar bg-slate-900/50">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-700 pb-2">Resultados neste colégio</h3>
+                
+                <div id="candidatos-lista" class="space-y-3">
+                    <!-- Gerado dinamicamente pelo JS -->
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- MapLibre GL JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <!-- Nosso Arquivo de Lógica -->
+    <script src="app.js"></script>
+</body>
+</html>
